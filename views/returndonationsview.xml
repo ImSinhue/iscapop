@@ -1,0 +1,19 @@
+<odoo>
+    <record id="view_return_to_warehouse_wizard_form" model="ir.ui.view">
+        <field name="name">return.to.warehouse.wizard.form</field>
+        <field name="model">iscapop_app.return_to_warehouse_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Return Items to Warehouse">
+                <group>
+                    <field name="donation_id"/>
+                    <field name="target_warehouse_id" domain="[('create_uid', '=', uid)]"/>
+                    <field name="quantity"/>
+                </group>
+                <footer>
+                    <button string="Return" type="object" name="return_items_to_warehouse" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

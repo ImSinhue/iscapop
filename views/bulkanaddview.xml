@@ -1,0 +1,45 @@
+<odoo>
+    <record id="view_add_items_wizard_form" model="ir.ui.view">
+        <field name="name">add.items.wizard.form</field>
+        <field name="model">iscapop_app.add_items_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Items to Location">
+                <group>
+
+                <field name="location_id" domain="[('create_uid', '=', uid)]"/>                    
+                <field name="item_id" domain="[('create_uid', '=', uid)]"/>
+                    <field name="quantity"/>
+                    <field name="state"/>
+                </group>
+                <footer>
+                    <button string="Add Items" type="object" name="add_items_to_location" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_add_items_wizard" model="ir.actions.act_window">
+        <field name="name">Add Items to Location</field>
+        <field name="res_model">iscapop_app.add_items_wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem name="Add Items" id="menu_add_items_wizard" parent="menu_root_inventory" action="action_add_items_wizard"/>
+
+    <!-- Eliminamos la referencia incorrecta al método open_add_items_wizard -->
+    <record id="view_location_model_form_inherit" model="ir.ui.view">
+        <field name="name">location.model.form.inherit</field>
+        <field name="model">iscapop_app.location_model</field>
+        <field name="inherit_id" ref="iscapop_app.view_location_model_form"/>
+        
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//sheet/group" position="inside">
+                    <!-- No más referencias a open_add_items_wizard -->
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

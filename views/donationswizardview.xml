@@ -1,0 +1,19 @@
+<odoo>
+    <record id="view_move_to_donation_wizard_form" model="ir.ui.view">
+        <field name="name">move.to.donation.wizard.form</field>
+        <field name="model">iscapop_app.move_to_donation_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Move Items to Donation">
+                <group>
+                    <field name="source_location_id" domain="[('create_uid', '=', uid)]"/>
+                    <field name="item_detail_id"/>
+                    <field name="quantity"/>
+                </group>
+                <footer>
+                    <button string="Move" type="object" name="move_items_to_donation" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

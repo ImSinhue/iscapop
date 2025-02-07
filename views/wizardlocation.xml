@@ -1,0 +1,17 @@
+<odoo>
+    <record id="view_location_wizard_form" model="ir.ui.view">
+        <field name="name">location.wizard.form</field>
+        <field name="model">iscapop_app.location_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Select Location">
+                <group>
+                    <field name="location_id" domain="[('create_uid', '=', uid)]"/>
+                </group>
+                <footer>
+                    <button string="Confirm" type="object" name="confirm_location" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

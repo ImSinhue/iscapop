@@ -1,0 +1,78 @@
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record model="ir.ui.view" id="category_model_form_view">
+            <field name="name">Category Form</field>
+            <field name="model">iscapop_app.category_model</field>
+            <field name="arch" type="xml">
+                <form string="Category">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="father_id"/>
+                            <field name="child_ids"/>
+                            <field name="item_ids"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="category_model_kanban_view">
+            <field name="name">Category Kanban</field>
+            <field name="model">iscapop_app.category_model</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="oe_kanban_details">
+                                    <strong>
+                                        <field name="father_id" class="oe_inline"/>
+                                    </strong>
+                                    <div>
+                                        <field name="description"></field>
+                                    </div>
+                                    <div>
+
+                                        <field name="child_ids"></field>
+                                    </div>
+                                    <div>
+                                        <field name="item_ids"></field>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record model="ir.ui.view" id="category_model_tree_view">
+            <field name="name">Category List</field>
+            <field name="model">iscapop_app.category_model</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="father_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Actions -->
+        <record model="ir.actions.act_window" id="action_category_model">
+            <field name="name">Categories</field>
+            <field name="res_model">iscapop_app.category_model</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="domain">[('create_uid', '=', uid)]</field>
+        </record>
+
+        <!-- Menu -->
+        <menuitem name="Categories" id="menu_categories" parent="menu_root_inventory" action="action_category_model"/>
+    </data>
+</odoo>

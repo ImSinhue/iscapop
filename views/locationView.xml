@@ -1,0 +1,100 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_location_model_tree" model="ir.ui.view">
+        <field name="name">Location Model List</field>
+        <field name="model">iscapop_app.location_model</field>
+        <field name="arch" type="xml">
+            <tree decoration-primary="location_type == 'warehouse'" decoration-info="location_type == 'class'" decoration-danger="location_type == 'retired'">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="location_type" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_location_model_form" model="ir.ui.view">
+        <field name="name">Location Model Form</field>
+        <field name="model">iscapop_app.location_model</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="open_move_items_wizard" string="Move Items to Warehouse" type="object" class="oe_highlight" invisible="location_type not in ('class', 'warehouse')"/>
+                    <button name="open_move_to_donation_wizard" string="Donate Items" type="object" class="oe_highlight" invisible="location_type == 'retired'"/>
+                    <button name="%(action_report_removed_items)d" string="Generate PDF" type="action" class="oe_highlight" invisible="location_type != 'retired'"/>
+                    <button name="delete_all_items_in_retired" string="Retire" type="object" class="oe_highlight" invisible="location_type != 'retired'"/>
+                    <button name="open_move_items_to_retired_wizard" string="Move Items to Retired" type="object" class="oe_highlight" invisible="location_type not in ('class', 'warehouse')"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="location_type" widget="selection_badge"/>
+                        <field name="item_detail_ids">
+                            <tree string="Items">
+                                <field name="item_id"/>
+                                <field name="stock"/>
+                                <field name="photo" widget="image" class="oe_left oe_avatar"/>
+                                <field name="state"/>
+                            </tree>
+                            <form string="Items Details">
+                                <group>
+                                    <field name="item_id"/>
+                                    <field name="stock" required="1"/>
+                                    <field name="state"/>
+                                </group>
+                            </form>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Pivot View -->
+    <record id="view_location_model_pivot" model="ir.ui.view">
+        <field name="name">Location Model Pivot</field>
+        <field name="model">iscapop_app.location_model</field>
+        <field name="arch" type="xml">
+            <pivot string="Location Model Pivot">
+                <field name="location_type" type="col"/>
+                <field name="item_state" type="row"/>
+                <field name="item_stock" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph View -->
+    <record id="view_location_model_graph" model="ir.ui.view">
+        <field name="name">Location Model Graph</field>
+        <field name="model">iscapop_app.location_model</field>
+        <field name="arch" type="xml">
+            <graph string="Location Model Statistics" type="bar">
+                <field name="location_type" type="row"/>
+                <field name="item_stock" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_location_model" model="ir.actions.act_window">
+        <field name="name">Location Models</field>
+        <field name="res_model">iscapop_app.location_model</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="view_id" ref="view_location_model_tree"/>
+        <field name="domain">[('create_uid', '=', uid)]</field>
+    </record>
+
+    <record model="ir.actions.report" id="action_report_removed_items">
+        <field name="name">Retire Report</field>
+        <field name="model">iscapop_app.location_model</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">iscapop_app.retired_items_report_template</field>
+        <field name="report_file">iscapop_app.retired_items_report_template</field>
+        <field name="binding_model_id" ref="model_iscapop_app_location_model"/>
+        <field name="print_report_name">'Retire Report - %s' % (object.name)</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem name="Location" id="menu_location_model" parent="menu_root_inventory" action="action_location_model"/>
+</odoo>

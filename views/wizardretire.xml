@@ -1,0 +1,27 @@
+<odoo>
+    <record id="view_move_items_to_retired_wizard_form" model="ir.ui.view">
+        <field name="name">move.items.to.retired.wizard.form</field>
+        <field name="model">iscapop_app.move_items_to_retired_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Move Items to Retired">
+                <group>
+                    <field name="source_location_id" domain="[('create_uid', '=', uid)]"/>
+                    <field name="item_detail_id"/>
+                    <field name="quantity"/>
+                    <field name="target_location_id" domain="[('create_uid', '=', uid), ('location_type', '=', 'retired')]"/>
+                </group>
+                <footer>
+                    <button name="move_items_to_retired" string="Move Items" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_move_items_to_retired_wizard" model="ir.actions.act_window">
+        <field name="name">Move Items to Retired</field>
+        <field name="res_model">iscapop_app.move_items_to_retired_wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

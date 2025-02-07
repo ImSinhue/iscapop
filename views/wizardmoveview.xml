@@ -1,0 +1,25 @@
+<odoo>
+    <record id="view_move_items_wizard_form" model="ir.ui.view">
+        <field name="name">move.items.wizard.form</field>
+        <field name="model">iscapop_app.move_items_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Move Items">
+                <group>
+                    <field name="source_location_id" />
+                    <field name="target_location_id" options="{'no_create': True}" domain="[('create_uid', '=', uid)]">
+                        <attribute name="options">{'no_create': True}</attribute>
+                        <attribute name="context">{
+                            'show_location_color': True
+                        }</attribute>
+                    </field>
+                    <field name="item_detail_id" context="{'show_name': True}"/>
+                    <field name="quantity"/>
+                </group>
+                <footer>
+                    <button string="Move" type="object" name="move_items" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

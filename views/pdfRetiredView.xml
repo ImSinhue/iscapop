@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="iscapop_app.retired_items_report_template">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <h2>Retired Items</h2>
+                <t t-if="docs">
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>State</th>
+                                <th>Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs[0].item_detail_ids" t-as="item">
+                                <t t-if="item.state == 'retired'">
+                                    <tr>
+                                        <td><t t-esc="item.name"/></td>
+                                        <td><t t-esc="dict(item._fields['state'].selection).get(item.state)"/></td>
+                                        <td><t t-esc="item.stock"/></td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+                <t t-else="">
+                    <h2>No retired items.</h2>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

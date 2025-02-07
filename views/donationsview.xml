@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Vista de Árbol -->
+    <record id="view_donation_model_tree" model="ir.ui.view">
+        <field name="name">Donation Model List</field>
+        <field name="model">iscapop_app.donation_model</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="description"/>
+                <field name="quantity"/>
+                <field name="state"/>
+                <field name="donated_by"/>
+                <field name="donation_time"/>
+                <field name="reserved_by"/>
+                <field name="reserved" widget="boolean_toggle"/>
+                <!-- Botones -->
+                <button string="Reserve" type="object" name="open_location_wizard" class="oe_highlight"
+                        confirm="Do you want to reserve?" invisible="donated_by == uid or reserved"/>
+                <button string="Unreserve" type="object" name="turn_to_unreserved" class="oe_highlight"
+                        confirm="Do you want to unreserve?" invisible="donated_by == uid or reserved_by != uid"/>
+                <button string="Return to Warehouse" type="object" name="open_return_to_warehouse_wizard"
+                        class="oe_highlight" invisible="donated_by != uid or reserved"/>
+                <!-- Botón "Confirm" -->
+                <button string="Confirm" type="object" name="confirmDonation" class="oe_highlight"
+                        invisible="reserved == False or donated_by != uid" confirm="Do you want to confirm?"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista de Formulario -->
+    <record id="view_donation_model_form" model="ir.ui.view">
+        <field name="name">Donation Model Form</field>
+        <field name="model">iscapop_app.donation_model</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!-- Botón "Return to Warehouse" -->
+                    <button string="Return to Warehouse" type="object" name="open_return_to_warehouse_wizard" class="oe_highlight" invisible="donated_by != uid"/>
+                    <!-- Botón "Confirm" -->
+                    <button string="Confirm" type="object" name="confirmDonation" class="oe_highlight" invisible="reserved == False or donated_by != uid" confirm="Do you want to confirm?"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="photo" widget="image" class="oe_avatar"/>
+                        <field name="quantity"/>
+                        <field name="state"/>
+                        <field name="donated_by" invisible="True"/>
+                        <field name="reserved" invisible="True"/>
+                        <field name="location_id" invisible="True"/>
+                        <field name="documentation"/>
+                        <field name="donation_time" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción -->
+    <record id="action_donation_model" model="ir.actions.act_window">
+        <field name="name">Donations</field>
+        <field name="res_model">iscapop_app.donation_model</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('create_uid', '!=', uid)]</field>
+    </record>
+
+    <record id="action_mydonation_model" model="ir.actions.act_window">
+        <field name="name">My Donations</field>
+        <field name="res_model">iscapop_app.donation_model</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('create_uid', '=', uid)]</field>
+    </record>
+
+    <!-- Menú -->
+    <menuitem name="Donations" id="menu_donation_model" parent="menu_root_inventory"/>
+    <menuitem name="My Donations" id="menu_mydonation" parent="menu_donation_model" action="action_mydonation_model"/>
+    <menuitem name="Donations" id="menu_donation" parent="menu_donation_model" action="action_donation_model"/>
+
+    <!-- Acción de Servidor para Generar PDFs -->
+    <record model="ir.actions.report" id="action_report_reserved_items">
+        <field name="name">Donated Report</field>
+        <field name="model">iscapop_app.donation_model</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">iscapop_app.donation_report_template</field>
+        <field name="report_file">iscapop_app.donation_report_template</field>
+        <field name="binding_model_id" ref="model_iscapop_app_donation_model"/>
+        <field name="print_report_name">'Donated Report - %s' % (object.name)</field>
+    </record>
+</odoo>
